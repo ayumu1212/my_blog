@@ -2,9 +2,9 @@ class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   def index
     @q = Post.order(created_at: :desc).ransack(params[:q])
-    @posts = @q.result(distinct:true)
+    @posts = @q.result.page(params[:page]).per(2)
 
-    @new_posts = Post.order(created_at: :desc).limit(5)
+    @new_posts = Post.find_newest_article
     @author = Author.first
   end
 
